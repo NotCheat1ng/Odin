@@ -28,8 +28,6 @@ import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import org.lwjgl.input.Keyboard
 import org.lwjgl.opengl.Display
-import me.odinmain.utils.command.Command
-import me.odinmain.utils.command.CommandManager
 
 object LeapMenu : Module(
     name = "Leap Menu",
