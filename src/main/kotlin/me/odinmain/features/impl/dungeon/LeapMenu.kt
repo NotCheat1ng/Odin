@@ -51,8 +51,7 @@ object LeapMenu : Module(
     private val hoveredAnims = List(4) { EaseInOut(200L) }
     private var hoveredQuadrant = -1
     private var previouslyHoveredQuadrant = -1
-    private val customNames = MutableList(4) { "" }
-    private var customNamesEnabled = false
+
     private val EMPTY = DungeonPlayer("Empty", DungeonClass.Unknown, 0, ResourceLocation("textures/entity/steve.png"))
 
     @SubscribeEvent
@@ -67,10 +66,10 @@ object LeapMenu : Module(
         previouslyHoveredQuadrant = hoveredQuadrant
 
         leapTeammates.forEachIndexed { index, it ->
-        if (it == EMPTY) return@forEachIndexed
-        GlStateManager.pushMatrix()
-        GlStateManager.enableAlpha()
-        scale(1f / scaleFactor,  1f / scaleFactor)
+            if (it == EMPTY) return@forEachIndexed
+            GlStateManager.pushMatrix()
+            GlStateManager.enableAlpha()
+            scale(1f / scaleFactor,  1f / scaleFactor)
 
             val displayWidth = Display.getWidth()
             val displayHeight = Display.getHeight()
@@ -98,12 +97,8 @@ object LeapMenu : Module(
             roundedRectangle(box, color, if (roundedRect) 12f else 0f)
 
             drawTexturedModalRect(x + 30, y + 30, 240, 240,8f, 8f, 8, 8, 64f, 64f)
-            val displayName = if (customNamesEnabled && index < customNames.size && customNames[index].isNotEmpty()) {
-                customNames[index]
-            } else {
-            it.name
-            }
-            text(displayName, x + 265f, y + 155f, if (!colorStyle) it.clazz.color else backgroundColor, 48f)
+
+            text(it.name, x + 265f, y + 155f, if (!colorStyle) it.clazz.color else backgroundColor, 48f)
             text(if (it.isDead) "§cDEAD" else it.clazz.name, x + 270f, y + 210f, Color.WHITE, 30f, shadow = true)
             rectangleOutline(x + 30, y + 30, 240, 240, color, 25f, 15f, 100f)
             GlStateManager.disableAlpha()
@@ -177,34 +172,6 @@ object LeapMenu : Module(
         onWorldLoad { worldLoad() }
     }
 
-    init {
-    CommandManager.registerCommand(Command("leaphider") { args ->
-        when (args.size) {
-            0 -> {
-                // Toggle custom names
-                customNamesEnabled = !customNamesEnabled
-                modMessage("Custom names ${if (customNamesEnabled) "enabled" else "disabled"}.")
-            }
-            1 -> {
-                // Invalid usage
-                modMessage("Usage: /leaphider <index> <name> to set a custom name.")
-            }
-            2 -> {
-                // Change the name at the specified index
-                val index = args[0].toIntOrNull()
-                if (index != null && index in 1..4) {
-                    customNames[index - 1] = args[1]
-                    modMessage("Custom name for position $index set to '${args[1]}'.")
-                } else {
-                    modMessage("Index must be between 1 and 4.")
-                }
-            }
-            else -> {
-                modMessage("Usage: /leaphider <index> <name> to set a custom name.")
-            }
-        }
-    })
-}
 
    /* private val leapTeammates: MutableList<DungeonPlayer> = mutableListOf(
         DungeonPlayer("Stiviaisd", DungeonClass.Healer),
@@ -247,3 +214,4 @@ object LeapMenu : Module(
         return result
     }
 }
+
